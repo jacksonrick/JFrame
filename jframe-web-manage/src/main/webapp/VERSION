@@ -59,8 +59,8 @@
         <version>v3.5.2</version>
         <date>20170801</date>
         <content>
-            <li>1.新增Redis服务</li>
-            <li>2.新增AppToken服务</li>
+            <li>1.优化Redis服务</li>
+            <li>2.优化AppToken服务</li>
         </content>
     </upgrade>
 	<upgrade>
@@ -76,7 +76,7 @@
     </upgrade>
 	<upgrade>
         <version>v3.4.3</version>
-        <date>20170325</date>
+        <date>20170525</date>
         <content>
             <li>1.更新部分SQL稳定性</li>
             <li>2.新增第三方支付和推送接口</li>
@@ -93,16 +93,17 @@
     </upgrade>
     <upgrade>
         <version>v3.4.1</version>
-        <date>20170524</date>
+        <date>20170324</date>
         <content>
             <li>1.新增地址和图片上传组件</li>
+            <li>2.优化封装的JS插件</li>
         </content>
     </upgrade>
     <upgrade>
         <version>v1.x</version>
         <date>20160601</date>
         <content>
-            <li>Jframe项目Start</li>
+            <li>JFrame项目Start</li>
         </content>
     </upgrade>
 </root>
