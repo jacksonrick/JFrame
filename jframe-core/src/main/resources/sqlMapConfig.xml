@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+
+	<settings>
+		<!-- 打开延迟加载 的开关 -->
+		<!-- <setting name="lazyLoadingEnabled" value="true"/> -->
+		<!-- 将积极加载改为消极加载即按需要加载 -->
+		<!-- <setting name="aggressiveLazyLoading" value="false"/> -->
+		<!-- 开启二级缓存 -->
+		<setting name="cacheEnabled" value="false"/>
+        <!-- 开启SQL控制台打印 -->
+        <setting name="logImpl" value="LOG4J2" />
+	</settings>
+	
+	<!-- 别名定义 -->
+	<typeAliases>
+        <typeAlias type="com.jf.entity.BaseVo" alias="baseVo" />
+		<!-- 批量别名定义 指定包名，mybatis自动扫描包中的po类，自动定义别名，别名就是类名（首字母大写或小写都可以） -->
+		<package name="com.jf.model" />
+		<package name="com.jf.entity.queryVo"/>
+		<package name="com.jf.entity.stat"/>
+	</typeAliases>
+
+	<plugins>
+		<!-- com.github.pagehelper -->
+		<plugin interceptor="com.github.pagehelper.PageInterceptor">
+			<property name="helperDialect" value="mysql"/>
+			<property name="supportMethodsArguments" value="true"/>
+			<property name="params" value="pageNum=pageNo;pageSize=pageSize;"/>
+		</plugin>
+	</plugins>
+	
+</configuration>

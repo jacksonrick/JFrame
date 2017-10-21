@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context" xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:tx="http://www.springframework.org/schema/tx" xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+            http://www.springframework.org/schema/beans/spring-beans.xsd    
+            http://www.springframework.org/schema/context    
+            http://www.springframework.org/schema/context/spring-context.xsd    
+            http://www.springframework.org/schema/mvc     
+            http://www.springframework.org/schema/mvc/spring-mvc.xsd
+            ">
+
+	<!-- 扫描控制器 -->
+	<context:component-scan base-package="com.jf/controller/**" />
+
+	<!-- 注解 -->
+	<mvc:annotation-driven>
+		<mvc:message-converters register-defaults="true">
+			<bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
+				<property name="prefixJson" value="false" />
+				<property name="supportedMediaTypes">
+					<list>
+						<value>application/json;charset=UTF-8</value>
+						<value>text/json;charset=UTF-8</value>
+					</list>
+				</property>
+				<property name="objectMapper">
+                    <bean class="com.fasterxml.jackson.databind.ObjectMapper">
+                        <property name="serializationInclusion">
+                            <value type="com.fasterxml.jackson.annotation.JsonInclude.Include">NON_NULL</value>
+                        </property>
+                        <property name="dateFormat">
+                            <bean class="java.text.SimpleDateFormat">
+                                <constructor-arg type="java.lang.String" value="yyyy-MM-dd HH:mm:ss" />
+                            </bean>
+                        </property>
+                    </bean>
+                </property>
+			</bean>
+			<bean class="org.springframework.http.converter.StringHttpMessageConverter">
+		    	<property name="supportedMediaTypes">
+		    		<list>
+		    			<value>text/plain;charset=UTF-8</value>
+		    		</list>
+		    	</property>
+		    </bean>
+		</mvc:message-converters>
+		<!-- 自定义参数解析器 -->
+		<mvc:argument-resolvers>
+			<bean class="com.jf.system.interceptor.ApiArgumentsResolver"/>
+		</mvc:argument-resolvers>
+	</mvc:annotation-driven>
+
+	<!-- 对静态资源文件的访问 -->
+	<mvc:resources mapping="/static/**" location="/static/" />
+
+	<!-- 配置自定义拦截过滤 -->
+	<mvc:interceptors>
+		<mvc:interceptor>
+			<mvc:mapping path="/app/**" />
+			<bean class="com.jf.system.interceptor.AppInterceptor" />
+		</mvc:interceptor>
+	</mvc:interceptors>
+
+	<!-- view视图 /WEB_INF/page/inde.jsp -->
+	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="prefix" value="/WEB-INF/" />
+		<property name="suffix" value=".jsp" />
+	</bean>
+
+	<!-- 配置 spring 支持json格式 -->
+	<!-- <bean class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">
+		<property name="messageConverters">
+			<list>
+				<ref bean="charSetConverter" />
+				<ref bean="jsonConverter" />
+			</list>
+		</property>
+	</bean>
+	<bean id="charSetConverter" class="org.springframework.http.converter.StringHttpMessageConverter">
+		<property name="supportedMediaTypes">
+			<list>
+				<value>text/plain;charset=UTF-8</value>
+			</list>
+		</property>
+	</bean>
+	<bean id="jsonConverter" class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
+		<property name="supportedMediaTypes">
+			<list>
+				<value>application/json;charset=UTF-8</value>
+			</list>
+		</property>
+	</bean> -->
+
+	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<!-- <property name="maxUploadSize" value="10485760" /> -->
+	</bean>
+
+</beans>

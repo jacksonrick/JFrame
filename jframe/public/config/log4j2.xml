@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="OFF">
+    <properties>
+        <property name="LOG_HOME">/Users/xujunfei/Downloads/logs</property>
+        <!--<property name="LOG_HOME">/opt/logs</property>-->
+        <property name="FILE_NAME">jframe_app</property>
+        <property name="ERROR_NAME">jframe_app_error</property>
+    </properties>
+
+    <Appenders>
+        <!--Show in console OR catalina.out-->
+        <Console name="console" target="SYSTEM_OUT">
+            <!--<ThresholdFilter level="INFO" onMatch="ACCEPT" onMismatch="DENY" />-->
+            <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level %logger{36} - %msg%n" />
+        </Console>
+
+        <!--Daliy File-->
+        <RollingFile name="syslog" fileName="${LOG_HOME}/${FILE_NAME}.log"
+                     filePattern="${LOG_HOME}/$${date:yyyy-MM}/${FILE_NAME}-%d{yyyy-MM-dd}-%i.log">
+            <Filters>
+                <ThresholdFilter level="WARN" onMatch="DENY" onMismatch="NEUTRAL"/>
+                <ThresholdFilter level="INFO" onMatch="ACCEPT" onMismatch="DENY"/>
+            </Filters>
+            <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level %logger{36} - %msg%n" />
+            <Policies>
+                <TimeBasedTriggeringPolicy modulate="true" interval="1" />
+                <SizeBasedTriggeringPolicy size="10MB" />
+            </Policies>
+            <DefaultRolloverStrategy max="20"/>
+        </RollingFile>
+
+        <!--Daliy Error File-->
+        <RollingFile name="error" fileName="${LOG_HOME}/${ERROR_NAME}.log"
+                     filePattern="${LOG_HOME}/$${date:yyyy-MM}/${ERROR_NAME}-%d{yyyy-MM-dd}-%i.log">
+            <ThresholdFilter level="WARN" onMatch="ACCEPT" onMismatch="DENY" />
+            <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level %logger{36} - %msg%n"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy modulate="true" interval="1" />
+                <SizeBasedTriggeringPolicy size="10MB" />
+            </Policies>
+            <DefaultRolloverStrategy max="20"/>
+        </RollingFile>
+    </Appenders>
+
+    <Loggers>
+        <Root level="INFO">
+            <AppenderRef ref="console" />
+            <AppenderRef ref="syslog" />
+            <AppenderRef ref="error" />
+        </Root>
+
+        <!--Dev Test-->
+        <Logger name="com.jf.mapper" level="DEBUG" additivity="false">
+            <AppenderRef ref="console" />
+        </Logger>
+        <Logger name="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping" level="ERROR">
+            <AppenderRef ref="error" />
+        </Logger>
+    </Loggers>
+</Configuration>

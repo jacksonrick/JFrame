@@ -1,0 +1,37 @@
+config.properties
+    网站域名        host.main   http://localhost:8080/
+    静态资源前缀    host.static http://localhost:8080/
+    [使用FastDFS无需配置]
+
+database
+    创建 jframe数据库 (utf-8)
+    执行 jframe.sql
+
+config/jdbc.properties
+    url
+    username    root
+    password
+
+web.xml
+    contextConfigLocation
+        必选     spring
+        可选     spring_quartz
+                 spring_redis
+
+组件
+    Redis
+    FastDFS
+    Third:Push,AliPay,WxPay,GeetestLib - 第三方api在jframe-utils包
+
+*静态资源库目录 jframe/static 自动部署到相应的webapp/static目录下
+*jsp公共目录 jframe-web-front/..WEB-INF/common 自动部署到相应的WEB-INF/common目录下，详见pom.xml
+*jdbc,config等字符串配置文件夹在jframe-public-config
+
+模块简介
+    jframe  主maven目录，文档和资源，配置
+    jframe-core         service,system
+    jframe-model        实体类,mapper
+    jframe-utils        工具类
+    jframe-web-app      移动端接口
+    jframe-web-front    前台接口
+    jframe-web-manage   后台管理接口

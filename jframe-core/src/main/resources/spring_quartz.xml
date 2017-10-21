@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:task="http://www.springframework.org/schema/task"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+            http://www.springframework.org/schema/beans/spring-beans.xsd
+            http://www.springframework.org/schema/task
+            http://www.springframework.org/schema/task/spring-task.xsd">
+
+    <!-- 基于注解式的Quartz -->
+    <task:annotation-driven />
+
+	<!-- 作业调度 -->
+	<bean id="jobDayTask" class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
+		<property name="jobClass" value="com.jf.system.job.DayJob"></property>
+		<property name="durability" value="true"></property>
+	</bean>
+	<bean id="jobMonthTask" class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
+		<property name="jobClass" value="com.jf.system.job.MonthJob"></property>
+		<property name="durability" value="true"></property>
+	</bean>
+	
+	<!-- 表达式 -->
+	<bean id="triggerDay" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail" ref="jobDayTask" />
+		<!-- <property name="cronExpression" value="0 0 1 * * ?" /> --><!-- 正式环境请更换此行表达式 -->
+		<property name="cronExpression" value="0 0 17 * * ?" />
+	</bean>
+	<bean id="triggerMonth" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail" ref="jobMonthTask" />
+		<!-- <property name="cronExpression" value="0 0 1 1 * ?" /> --><!-- 正式环境请更换此行表达式 -->
+		<property name="cronExpression" value="0 0 17 * * ?" />
+	</bean>
+	
+	<!-- [秒] [分] [小时] [日] [月] [周] [年] -->
+	<!-- 0/30 * * * * ?   #测试：每30秒执行一次  -->
+	<!-- 0 0 0 * * ?      #每日凌晨0点0分0秒 -->
+	<!-- 0 0 23 ? * SUN   #每周最后一天23点 -->
+	<!-- 0 0 0 1 * ?      #每月1号凌晨0点0分0秒  -->
+	<!-- 0 0 23 L * ?     #每月最后一天23点 -->
+	<!-- 0 0 23 L DEC ?   #每年最后一天23点 -->
+	<!-- 0 0 23 L JUN ?   #每年6月(半年)最后一天23点 -->
+	
+	
+	<!-- 管理类-->
+	<!-- 如果将lazy-init='false'那么容器启动就会执行调度程序  -->
+	<bean id="startQuartz" class="org.springframework.scheduling.quartz.SchedulerFactoryBean" lazy-init="false" autowire="no">
+		<!-- 注入spring管理的service -->
+		<property name="schedulerContextAsMap">
+			<map>
+				<description>schedulerContextAsMap</description>
+				<entry key="jobService" value-ref="jobService" />
+				<entry key="adminService" value-ref="adminService" />
+			</map>
+		</property>
+		
+		<property name="triggers">
+			<list>
+				<!--作业调度器  可加入多个调度器 -->
+				<ref bean="triggerDay" />
+				<ref bean="triggerMonth" />
+			</list>
+		</property>
+		
+		<property name="configLocation" value="classpath:quartz-single.properties" />
+	</bean>
+
+</beans>

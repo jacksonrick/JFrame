@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context" xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:tx="http://www.springframework.org/schema/tx" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans     
+	    http://www.springframework.org/schema/beans/spring-beans.xsd    
+	    http://www.springframework.org/schema/context    
+	    http://www.springframework.org/schema/context/spring-context.xsd    
+	    http://www.springframework.org/schema/aop
+		http://www.springframework.org/schema/aop/spring-aop.xsd 
+		http://www.springframework.org/schema/tx  
+		http://www.springframework.org/schema/tx/spring-tx.xsd
+		http://www.springframework.org/schema/util 
+		http://www.springframework.org/schema/util/spring-util.xsd
+		">
+
+	<!-- 使用注解 -->
+	<context:annotation-config />
+	
+	<!-- 组件扫描路径 -->
+	<context:component-scan base-package="com.jf">
+		<context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+	</context:component-scan>
+
+	<!-- 读取配置properties -->
+	<bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="locations">
+			<!-- jdbc配置,可配置多个properties文件 -->
+			<list>
+				<value>classpath:jdbc.properties</value>
+				<value>classpath:mail.properties</value>
+				<value>classpath:redis.properties</value>
+			</list>
+		</property>
+	</bean>
+	
+	<!-- Web Configuration -->
+	<util:properties id="cfg" location="classpath:config.properties" />
+	<!-- <util:properties id="msg" location="classpath:message.properties" /> -->
+	
+	<!-- druid dataSource -->
+	<bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close">  
+         <!-- 数据库基本信息配置 -->
+         <property name="url" value="${url}" />  
+         <property name="username" value="${username}" />  
+         <property name="password" value="${password}" />  
+         <property name="driverClassName" value="${driver}" />  
+         <property name="filters" value="${filters}" />  
+   		 <!-- 最大并发连接数 -->
+         <property name="maxActive" value="${maxActive}" />
+         <!-- 初始化连接数量 -->
+         <property name="initialSize" value="${initialSize}" />
+         <!-- 配置获取连接等待超时的时间 -->
+         <property name="maxWait" value="${maxWait}" />
+         <!-- 最小空闲连接数 -->
+         <property name="minIdle" value="${minIdle}" />  
+   		 <!-- 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒 -->
+         <property name="timeBetweenEvictionRunsMillis" value="${timeBetweenEvictionRunsMillis}" />
+         <!-- 配置一个连接在池中最小生存的时间，单位是毫秒 -->
+         <property name="minEvictableIdleTimeMillis" value="${minEvictableIdleTimeMillis}" />  
+         <property name="validationQuery" value="${validationQuery}" />  
+         <property name="testWhileIdle" value="${testWhileIdle}" />  
+         <property name="testOnBorrow" value="${testOnBorrow}" />  
+         <property name="testOnReturn" value="${testOnReturn}" />  
+         <property name="maxOpenPreparedStatements" value="${maxOpenPreparedStatements}" />
+         <!-- 打开removeAbandoned功能 -->
+         <property name="removeAbandoned" value="${removeAbandoned}" />
+         <!-- 1800秒，也就是30分钟 -->
+         <property name="removeAbandonedTimeout" value="${removeAbandonedTimeout}" />
+         <!-- 关闭abanded连接时输出错误日志 -->   
+         <property name="logAbandoned" value="${logAbandoned}" />
+         <!-- 加密 ConfigTools.encrypt(pwd) -->
+         <!-- <property name="connectionProperties" value="config.decrypt=true;config.decrypt.key=${publickey}" /> -->
+	</bean>
+
+	<!-- sqlSessinFactory -->
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<!-- 数据源 -->
+		<property name="dataSource" ref="dataSource" />
+		<!-- mybatis配置 -->
+		<property name="configLocation">
+			<value>classpath:sqlMapConfig.xml</value>
+		</property>
+		<!-- mapper.xml -->
+		<property name="mapperLocations" value="classpath:com/jf/mapper/xml/*.xml"></property>
+	</bean>
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<!-- 接口扫描路径 -->
+		<property name="basePackage" value="com.jf.mapper" />
+		<property name="sqlSessionFactoryBeanName" value="sqlSessionFactory" />
+	</bean>
+
+	<!-- spring事务 -->
+	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager"> 
+		<property name="dataSource" ref="dataSource" /> 
+		<property name="globalRollbackOnParticipationFailure" value="false" /> 
+	</bean> 
+	<tx:annotation-driven transaction-manager="transactionManager" /> 
+
+	<!-- spring线程池 -->
+	<bean id="taskExecutor" class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
+		<property name="corePoolSize" value="10"/>
+		<property name="maxPoolSize" value="30"/>
+	</bean>
+
+	<!-- 初始化数据[ServletContext] -->
+	<!-- <bean class="com.jf.system.db.InitData"></bean> -->
+
+	<!-- freemarker模板 -->
+	<bean id="freeMarker" class="org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer">
+		<property name="templateLoaderPaths">
+			<list>
+				<value>classpath:tpl/</value>
+				<value>WEB-INF/</value>
+			</list>
+		</property><!-- 指定模板文件目录 -->
+		<property name="freemarkerSettings"><!-- 设置FreeMarker环境属性 -->
+			<props>
+				<prop key="template_update_delay">0</prop><!-- 刷新模板的周期，单位为秒 -->
+				<prop key="default_encoding">UTF-8</prop><!-- 模板的编码格式 -->
+				<prop key="locale">zh_CN</prop><!-- 本地化设置 -->
+				<prop key="url_escaping_charset">UTF-8</prop>
+				<prop key="date_format">yyyy-MM-dd</prop>
+                <prop key="time_format">HH:mm:ss</prop>
+                <prop key="datetime_format">yyyy-MM-dd HH:mm:ss</prop>
+                <prop key="number_format">0.##</prop>
+                <prop key="boolean_format">true,false</prop> 
+                <prop key="classic_compatible">true</prop>
+                <prop key="whitespace_stripping">true</prop>
+			</props>
+		</property>
+		<property name="freemarkerVariables">
+			<map><entry key="pagination"><bean class="com.jf.freemarker.TemplateDirectivePage"/></entry></map>
+		</property>
+	</bean>
+	
+	<bean id="mailsender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
+		<property name="host">
+			<value>${mail.host}</value>
+		</property>
+		<property name="javaMailProperties">
+			<props>
+				<prop key="mail.smtp.auth">${mail.smtp.auth}</prop>
+				<prop key="mail.smtp.timeout">${mail.smtp.timeout}</prop>
+			</props>
+		</property>
+		<property name="username">
+			<value>${mail.username}</value>
+		</property>
+		<property name="password">
+			<value>${mail.password}</value>
+		</property>
+	</bean>
+
+    <!-- 邮件服务 -->
+    <bean id="emailUtil" class="com.jf.email.EmailUtil">
+        <property name="freeMarkerConfigurer" ref="freeMarker"></property>
+        <property name="sender" ref="mailsender"></property>
+    </bean>
+    <!-- 短信服务 -->
+    <bean id="smsUtil" class="com.jf.sms.SMSUtil">
+        <property name="freeMarkerConfigurer" ref="freeMarker"></property>
+    </bean>
+	<!-- PDF -->
+    <bean id="pdfUtil" class="com.jf.view.PDFUtil">
+        <property name="freeMarkerConfigurer" ref="freeMarker"></property>
+    </bean>
+
+	<!-- 邮件发送线程池配置 -->
+	<bean id="email" class="com.jf.email.EmailService">
+		<property name="taskExecutor" ref="taskExecutor" />
+	</bean>
+	<!-- 短信发送线程池配置 -->
+	<bean id="sms" class="com.jf.sms.SMService">
+		<property name="taskExecutor" ref="taskExecutor" />
+	</bean>
+	<!-- JPush -->
+	<!--<bean id="jpush" class="com.jpush.JPush"></bean>
+	<bean id="sendPush" class="com.jpush.JPushService">
+		<property name="taskExecutor" ref="taskExecutor" />
+	</bean>-->
+	
+</beans>

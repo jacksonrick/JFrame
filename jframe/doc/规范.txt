@@ -1,0 +1,44 @@
+规范：
+	controller层以大模块分类(Class)
+		-只对数据进行校验、转换、查询
+	service层以大模块分包(Package)，子模块分类(Class)【对于子模块功能较少，可合并】
+		-逻辑处理、增删改查
+	ajax模板渲染使用layui tpl
+
+	以下表Id使用int
+		t_payway、t_module、t_grade...
+		其余为bigint
+	附属表
+		t_user t_user_info t_user_fund
+		t_product t_product_info ...
+	以下表id既是主键也是外键
+		t_approval t_shop t_user_info t_product_info ...
+	默认按时间排序
+	    排序字段用 id 而非 create_time
+
+返回码说明：
+	 0	- 成功			100	- 无权限
+	>0	- 失败			99	- 未登录
+	-1	- 系统异常		98	- APPKey不正确
+	                    97  - 非法访问
+
+分页：
+    原始：
+        int total = userMapper.findCountByCondition(condition);
+        List<User> list = userMapper.findByCondition(condition);
+        return new Pagination(list, total, condition.getPageNo(), condition.getPageSize());
+
+    现：APP或者JSON数据的分页，使用PageHelper -> PageInfo作为数据载体
+        *只有pageNo和PageSize同时存在，才会调用分页 【设置 condition.setPage(true) 开启分页查询】
+           List查询后直接调用 return new PageInfo(list);
+        *如果出现子查询分页，需要手动写分页代码
+
+URL前需要加 '/', 如：/admin/method.do
+
+freemarker
+    引用：<#include "include.ftl"/> 【不需要相对路径】
+    标签：${convert("key","*********")}
+         ${convert("phone","17730215423")}
+         ${convert("idcard","340123199311012674")}
+    指令：<@pagination form="queryForm" data=page> </@pagination>  【标签中间必须要有空格】
+    FM基本用法：http://blog.csdn.net/u011118289/article/details/43306015
