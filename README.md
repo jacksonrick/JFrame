@@ -1,9 +1,9 @@
 # JFrame
-#####JFrame - SSM Frame Project <br>
+##### JFrame - SSM Frame Project <br>
 `jackson-rick`    `v3.7` <br>
 `IntelliJ IDEA`
 
-###模块
+### 模块
 * jframe `文档/配置/共享静态资源`
 * jframe-core `服务类/系统相关`
 * jframe-model `实体类/Mapper`
@@ -12,7 +12,7 @@
 * jframe-web-front `PC前端`
 * jframe-web-manage `后台管理系统`
 
-###集成
+### 集成
 * Spring/SpringMVC/MyBatis
 * Spring Redis/Redis Session
 * 拦截器/AppToken/FastDFS
@@ -31,7 +31,7 @@
     * 其他：`jframe/public/static/library/plugins/`
     * Demo：`jframe-web-front/../WEB-INF/demo/`
 
-###更新日志：
+### 更新日志：
 * v3.7 `20171022`
     * 1.更新页面模板：Freemarker
 * v3.6.1 `20171016`
