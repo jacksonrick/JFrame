@@ -132,5 +132,10 @@
         UPDATE t_user SET is_delete = !is_delete
         WHERE id = #{id}
     </update>
+
+    <delete id="deleteBatch">
+        DELETE FROM t_user
+        WHERE id IN <foreach item="id" collection="ids" open="(" separator="," close=")"> #{id} </foreach>
+    </delete>
 	
 </mapper>

@@ -32,8 +32,11 @@
     * Demo：`jframe-web-front/../WEB-INF/demo/`
 
 ### 更新日志：
+* v3.7.1 `20171103`
+    * 1.修复BUG
 * v3.7 `20171022`
     * 1.更新页面模板：Freemarker
+    * 2.集成Flume日志
 * v3.6.1 `20171016`
     * 1.新的分页插件：pageHelper
     * 2.优化dataTables

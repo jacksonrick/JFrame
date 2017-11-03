@@ -9,6 +9,7 @@
         <date>20171022</date>
         <content>
             <li>1.更新页面模板：Freemarker</li>
+            <li>2.集成Flume日志</li>
         </content>
     </upgrade>
 	<upgrade>

@@ -57,11 +57,11 @@
             <label class="col-sm-2 control-label">账号：</label>
             <div class="col-sm-9">
                 <div class="radio radio-info radio-inline">
-                    <input type="radio" name="userState" id="state1" value="0" ${user.isDelete?string('','checked') }>
+                    <input type="radio" name="isDelete" id="state1" value="0" ${user.isDelete?string('','checked') }>
                     <label for="state1">正常</label>
                 </div>
                 <div class="radio radio-info radio-inline">
-                    <input type="radio" name="userState" id="state2" value="1" ${user.isDelete?string('checked','') }>
+                    <input type="radio" name="isDelete" id="state2" value="1" ${user.isDelete?string('checked','') }>
                     <label for="state2">禁用</label>
                 </div>
             </div>
@@ -123,7 +123,7 @@
         $("#userEditForm").bootstrapValidator({
             excluded: [':disabled'],
             fields: {
-                userName: {
+                nickname: {
                     validators: {
                         notEmpty: {
                             message: '用户名不能为空'
@@ -135,7 +135,7 @@
                         }
                     }
                 },
-                userEmail: {
+                email: {
                     validators: {
                         stringLength: {
                             max: 32,
@@ -146,7 +146,7 @@
                         }
                     }
                 },
-                userPhone: {
+                phone: {
                     validators: {
                         regexp: {
                             regexp: /^1[3|4|5|7|8][0-9]\d{8}$/,
@@ -154,7 +154,7 @@
                         }
                     }
                 },
-                userPassword: {
+                password: {
                     validators: {
                         stringLength: {
                             min: 6,
@@ -163,7 +163,7 @@
                         }
                     }
                 },
-                userRealname: {
+                realname: {
                     validators: {
                         stringLength: {
                             max: 16,
@@ -171,7 +171,7 @@
                         }
                     }
                 },
-                userIdcard: {
+                idcard: {
                     validators: {
                         regexp: {
                             regexp: /^(\d{15}$|^\d{18}$|^\d{17}(\d|X|x))$/,

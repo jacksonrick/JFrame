@@ -30,6 +30,8 @@ public interface UserMapper {
 
     int delete(Long id);
 
+    int deleteBatch(@Param("ids") Long[] ids);
+
     List<Map<String, Object>> findForDataView(BaseVo baseVo);
 
 }

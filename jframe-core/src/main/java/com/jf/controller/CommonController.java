@@ -53,7 +53,7 @@ public class CommonController {
     // 文件大小【非图片】
     private Integer fileSize = 10;
     // 文件类型
-    String[] fileType = new String[]{"zip", "rar"};
+    String[] fileType = new String[]{"zip", "rar", "txt"};
 
     /**
      * geetest验证
@@ -219,6 +219,9 @@ public class CommonController {
 
         if (upload == 1) {
             String uploadPath = "static/upload/images/";
+            if (t == 2) {
+                uploadPath = "static/upload/file/";
+            }
             String filename = StringUtil.randomFilename(file.getOriginalFilename());
             String basePathFormat = DateUtil.getYearAndMonth(false);
             String realPath = request.getSession().getServletContext().getRealPath("/" + uploadPath + basePathFormat);

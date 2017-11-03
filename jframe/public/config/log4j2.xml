@@ -40,6 +40,12 @@
             </Policies>
             <DefaultRolloverStrategy max="20"/>
         </RollingFile>
+
+        <!--flume-->
+        <!--<Flume name="flume" compress="false" type="Avro">
+            <Agent host="192.168.1.171" port="8888" />
+            <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level %logger{36} - %msg%n"/>
+        </Flume>-->
     </Appenders>
 
     <Loggers>
@@ -47,6 +53,7 @@
             <AppenderRef ref="console" />
             <AppenderRef ref="syslog" />
             <AppenderRef ref="error" />
+            <!--<AppenderRef ref="flume" />-->
         </Root>
 
         <!--Dev Test-->

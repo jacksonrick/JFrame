@@ -37,6 +37,7 @@
 </div>
 
 <script type="text/javascript">
+    $.getScript("/static/common/js/enums.js");
     var tables;
     $(function () {
         var columns = [
@@ -58,7 +59,7 @@
                     if (full.isDelete) {
                         btns += CONSTANT.BUTTON.ENABLE();
                     } else {
-                        btns += CONSTANT.BUTTON.DISENABLE();
+                        btns += CONSTANT.BUTTON.DISABLE();
                     }
                     return btns;
                 }

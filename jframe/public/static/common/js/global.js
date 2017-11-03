@@ -85,8 +85,6 @@ var parseParam = function (param) {
     return paramStr.substring(0, paramStr.length - 1);
 };
 
-$.getScript("/static/common/js/enums.js");
-
 /**
  * TataTables Configuration
  * Created by xujunfei on 2017/8/12.
@@ -187,8 +185,11 @@ var CONSTANT = {
         ENABLE: function () {
             return "<button class='btn btn-info btn-sm btn-circle btn-enable' title='启用' type='button'><i class='fa fa-check'></i></button>";
         },
-        DISENABLE: function () {
-            return "<button class='btn btn-danger btn-sm btn-circle btn-enable' title='删除' type='button'><i class='fa fa-trash-o'></i></button>";
+        DISABLE: function () {
+            return "<button class='btn btn-warning btn-sm btn-circle btn-enable' title='禁用' type='button'><i class='fa fa-trash-o'></i></button>";
+        },
+        DELETE: function () {
+            return "<button class='btn btn-danger btn-sm btn-circle btn-del' title='删除' type='button'><i class='fa fa-trash-o'></i></button>";
         }
     },
     RENDER: {// 转换器

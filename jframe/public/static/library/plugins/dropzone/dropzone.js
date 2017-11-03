@@ -1729,7 +1729,7 @@
             accept = ".jpg,.jpeg,.png";
             size = 2;
         } else if (type == 2) {
-            accept = ".rar,.zip";
+            accept = ".rar,.zip,.txt";
             size = 10;
         }
         var images = new Array();
@@ -1773,7 +1773,7 @@
                 content: dropzone,
                 success: function () {
                     var myDropzone = new Dropzone("#uploads", {
-                        url: "upload.do?type=" + type,
+                        url: "/upload.do?t=" + type,
                         paramName: "file",
                         maxFiles: limit,
                         maxFilesize: size,
@@ -1879,7 +1879,7 @@
             content: dropzone,
             success: function () {
                 var myDropzone = new Dropzone("#uploads", {
-                    url: "upload.do?t=1",
+                    url: "/upload.do?t=1",
                     paramName: "file",
                     maxFiles: 1,
                     maxFilesize: 2,

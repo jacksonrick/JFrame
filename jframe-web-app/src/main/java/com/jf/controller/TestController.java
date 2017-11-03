@@ -3,6 +3,7 @@ package com.jf.controller;
 import com.jf.entity.ResMsg;
 import com.jf.sms.SMService;
 import com.jf.system.Constant;
+import com.jf.system.LogManager;
 import com.jf.system.authority.Token;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -18,6 +19,12 @@ public class TestController extends BaseController {
 
     @Resource
     private SMService smService;
+
+    @GetMapping("/test")
+    public ResMsg test() {
+        LogManager.info("test");
+        return new ResMsg(0, SUCCESS);
+    }
 
     @GetMapping("/app/get")
     public ResMsg get() {

@@ -4,6 +4,7 @@ import com.alipay.AlipayConfig;
 import com.alipay.api.internal.util.AlipaySignature;
 import com.jf.convert.Convert;
 import com.wechat.util.ResponseHandler;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -19,6 +20,8 @@ import java.util.SortedMap;
 /**
  * Created by xujunfei on 2017/3/25.
  */
+//@Controller
+//@RequestMapping("/app")
 public class AppPayController {
 
     /**

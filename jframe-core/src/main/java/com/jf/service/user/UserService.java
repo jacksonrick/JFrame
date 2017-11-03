@@ -175,4 +175,15 @@ public class UserService {
     public int deleteUser(Long userId) {
         return userMapper.delete(userId);
     }
+
+    /**
+     * 批量删除
+     *
+     * @param ids
+     * @return
+     */
+    public int deleteBatch(Long[] ids) {
+        return userMapper.deleteBatch(ids);
+    }
+
 }
